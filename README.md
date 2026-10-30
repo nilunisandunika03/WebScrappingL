@@ -1,39 +1,146 @@
 # WebScrappingL
 
-Learning-focused repository for **web scraping** practice to support a final year research project.
+A Python-based web scraping component developed for the **Sinhala Newspaper Summarization System** research project.
 
-## Goal
-Build practical web scraping skills and produce clean, research-ready datasets.
+## Project Overview
 
-## Learning Roadmap
-1. **Basics (Week 1)**
-   - Learn HTML structure (`tags`, `classes`, `ids`)
-   - Practice with Python `requests` and `BeautifulSoup`
-2. **Dynamic Pages (Week 2)**
-   - Handle JavaScript-rendered content with Selenium or Playwright
-   - Extract paginated results
-3. **Data Quality (Week 3)**
-   - Clean and normalize collected data
-   - Save outputs as CSV/JSON for analysis
-4. **Research Integration (Week 4)**
-   - Define scraping targets based on research questions
-   - Document methodology for reproducibility
+This branch focuses exclusively on collecting Sinhala news articles from three Sri Lankan newspaper websites:
 
-## Suggested Workflow
-1. Pick one small website/page for practice.
-2. Inspect page structure with browser developer tools.
-3. Write a scraper for one data field first, then expand.
-4. Add error handling and polite delays between requests.
-5. Store cleaned outputs in a consistent schema.
+- [Lankadeepa](https://www.lankadeepa.lk/)
+- [Ada Derana](https://www.adaderana.lk/)
+- [Hiru News](https://www.hirunews.lk/)
 
-## Responsible Scraping Checklist
-- Check `robots.txt` and site terms before scraping.
-- Avoid overloading websites (rate-limit your requests).
-- Do not scrape private or restricted data.
-- Keep a log of source URLs and timestamps for research transparency.
+The purpose of this component is to retrieve individual news articles and store their information in a centralized SQLite database.
 
-## Next Milestones
-- [ ] Create first scraper script for a static page
-- [ ] Extract at least 100 records into CSV
-- [ ] Validate data quality (missing values, duplicates)
-- [ ] Prepare a short method note for the final year research report
+The collected data serves as the input for subsequent research and development stages.&#x20;
+
+## Features
+
+- Collects news articles from three Sri Lankan newspaper websites.
+- Extracts individual article headlines and full article text.
+- Retrieves article URLs and available publication times.
+- Stores newspaper source information and collected articles in SQLite.
+- Prevents duplicate article insertion using article URLs.
+- Updates missing information when existing articles are collected again.
+- Preserves separate articles from different newspapers, even when they report the same news story.
+- Runs all newspaper collectors through a centralized execution workflow.
+- Repeats the collection process at configurable intervals.
+- Handles individual website collection failures without stopping other collectors.
+
+## Project Structure
+
+```text
+WebScrappingL/
+│
+├── Lankadeepa.py          # Lankadeepa news collector
+├── adaDerana.py           # Ada Derana news collector
+├── Hirunews.py            # Hiru News collector
+│
+├── database.py            # Shared SQLite database operations
+├── create_database.py     # Database initialization and verification
+├── main.py                # Main collection workflow
+│
+├── newspaper_news.db      # SQLite database
+├── requirements.txt       # Project dependencies
+└── README.md
+```
+
+## Technologies Used
+
+- **Python** – Main programming language
+- **Requests** – HTTP requests to newspaper websites
+- **BeautifulSoup4** – HTML parsing and content extraction
+- **lxml** – HTML parsing backend
+- **SQLite** – Database storage
+
+## Getting Started
+
+### 1. Clone the repository
+
+```bash
+git clone <repository-url>
+cd WebScrappingL
+```
+
+### 2. Create a virtual environment
+
+```bash
+python -m venv .venv
+```
+
+### 3. Activate the virtual environment
+
+Windows PowerShell:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+### 4. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 5. Initialize the database
+
+```bash
+python create_database.py
+```
+
+### 6. Run the collection system
+
+```bash
+python main.py
+```
+
+The main script executes all three newspaper collectors and repeats the collection process every 60 seconds.
+
+## Database
+
+Collected information is stored in `newspaper_news.db`.
+
+The database maintains:
+
+- Newspaper source information
+- Individual article headlines
+- Full article text
+- Article URLs
+- Available publication timestamps
+- Collection timestamps
+- Story associations, where applicable
+
+Each distinct article is retained as a separate record. Duplicate URL detection prevents the same article from being inserted repeatedly.
+
+## Development Scope
+
+This branch covers only the web scraping and data collection stage of the overall research project.
+
+**Completed:**
+
+- [x] Lankadeepa news collector
+- [x] Ada Derana news collector
+- [x] Hiru News collector
+- [x] Shared SQLite database
+- [x] Centralized database operations
+- [x] Duplicate URL detection
+- [x] Main collection workflow
+- [x] Periodic news collection
+
+**Future work outside this branch:**
+
+- Sinhala news similarity detection and story grouping
+- Multi-source news summarization
+- User-configurable summary durations
+- Text-to-speech functionality
+- Desktop or mobile application development
+
+## Responsible Web Scraping
+
+- Respect website terms of service and applicable access restrictions.
+- Check `robots.txt` where applicable.
+- Use reasonable request intervals.
+- Avoid unnecessary requests to newspaper websites.
+- Retain source URLs and collection timestamps for research traceability.
+
+##
